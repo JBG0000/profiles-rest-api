@@ -33,7 +33,7 @@ class UserProfileManager(BaseUserManager):
 
 
 #데이터베이스에 email, name, is_active, is_staff 열 생성
-class UserProfile(AbstractBaseUser, PermissionsMixin):
+class UserProfile(AbstractBaseUser, PermissionsMixin): #카멜 케이스로 작성
     """Database model for users in the system"""    #클래스 목적
     email = models.EmailField(max_length=255, unique=True)  #이메일 받기 : 255자 이내, 값은 고유해야함
     name = models.CharField(max_length=255)
