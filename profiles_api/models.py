@@ -42,6 +42,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin): #카멜 케이스로 작�
 
     objects = UserProfileManager()  #관리나 클래스를 생성할 예정, 아직 생성하지 않았지만 추후 만들것
 
+    #유저네임필드를 email로 지정했다
     #최소한 사용자가 이메일과 이름을 지정해야함
     USERNAME_FIELD = 'email'    #사용자 이름 필드 대체, 이메일 필드를 사용해 사용자 이름과 비밀번호 제공할 것
     REQUIRED_FIELDS = ['name']

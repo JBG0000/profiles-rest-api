@@ -10,6 +10,7 @@ router.register('profile', views.UserProfileViewSet)    #UseProfileViewSet 클�
 
 urlpatterns = [ #View에 매핑되는 경로
     path('hello-view/', views.HelloApiView.as_view()),  #경로, 호출 : APiView
+    path('login/', views.UserLoginApiView.as_view()), #로그인 APIView 경로, 호출
 
     path('',  include(router.urls)),    #ViewSets 경로
     #첫 인수가 빈 문자열인 이유는 이 URL에 접두사를 추가하고 싶지 않기 때문에

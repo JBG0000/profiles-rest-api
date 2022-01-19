@@ -5,6 +5,8 @@ from rest_framework.response import Response    #Response object 가져옴
 from rest_framework import status   #API에서 응답 바나환할 때 사용할 수 있는 HTTP status code
 from rest_framework.authentication import TokenAuthentication   #사용자 API로 자신을 인증하는데 사용하는 토큰
 from rest_framework import filters  #profile API에서 검색 기능 추가 시 사용 filters
+from rest_framework.authtoken.views import ObtainAuthToken  #인증토큰 얻을때 추가
+from rest_framework.settings import api_settings
 
 from profiles_api import permissions    #작성한 permissions.py 참조
 from profiles_api import serializers, models    #작성한 serializers, models 임포트
@@ -149,3 +151,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     filter_backends = (filters.SearchFilter,)   #백엔드에서 filter하겠다는 코드, 단일 항목이 아닌 튜플
     search_fields = ('name', 'email',)  #search_fields는 지정한 필드에서 검색가능하게 한다는것을 의미..?
+
+
+#사용자 로그인 class 정의(APIView)
+class UserLoginApiView(ObtainAuthToken):
+   """Handle creating user authentication tokens"""
+   renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES #ObtainAuthToken에 렌더러클래스 추가
