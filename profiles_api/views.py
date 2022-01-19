@@ -1,10 +1,12 @@
 from rest_framework.views import APIView    #APIView 클래스 가져오기
+from rest_framework import viewsets #Viewsets 클래스 가져오기
+
 from rest_framework.response import Response    #Response object 가져옴
 from rest_framework import status   #API에서 응답 바나환할 때 사용할 수 있는 HTTP status code
 
 from profiles_api import serializers    #작성한 serializers 임포트
 
-class HelloApiView(APIView):    #문서 문자열 테스트 API 보기
+class HelloApiView(APIView):    #문서 문자열 테스트 APIView
     """Test API View"""
     serializer_class = serializers.HelloSerializer  #serializers 클래스가 포함된 API View
     #serializers는 정의한대로, 게시물 추가 패치 요청을 보낼 때마다 이름값을 요구함
@@ -69,3 +71,64 @@ class HelloApiView(APIView):    #문서 문자열 테스트 API 보기
         """Delete an object"""
 
         return Response({'method': 'DELETE'})
+
+
+
+#위에는 APIView 클래스고 밑에는 Viewsets 클래스
+class HelloViewSet(viewsets.ViewSet):
+    """Test API ViewSet"""
+
+    serializer_class = serializers.HelloSerializer  #serializers 클래스가 포함된 ViewSets
+
+    #APiView와 추가하는 기능이 다름
+
+    def list(self, request):
+        """Return a hello message."""
+
+        a_viewset = [
+            'Uses actions (list, create, retrieve, update, partial_update)',
+            'Automatically maps to URLS using Routers',
+            'Provides more functionality with less code',
+        ]
+
+        return Response({'message': 'Hello!', 'a_viewset': a_viewset})
+
+
+    #생성
+    def create(self, request):
+        """Create a new hello message."""
+        serializer = self.serializer_class(data=request.data)   #위에서 똑같이 씀
+
+        if serializer.is_valid():
+            name = serializer.validated_data.get('name')
+            message = f'Hello {name}!'
+            return Response({'message': message})
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    #검색
+    def retrieve(self, request, pk=None):
+        """Handle getting an object by its ID"""
+
+        return Response({'http_method': 'GET'})
+
+    #HTTP 매핑 전체 업데이트
+    def update(self, request, pk=None):
+        """Handle updating an object"""
+
+        return Response({'http_method': 'PUT'})
+
+    #부분 업데이트
+    def partial_update(self, request, pk=None):
+        """Handle updating part of an object"""
+
+        return Response({'http_method': 'PATCH'})
+
+    #HTTP Delete 호출
+    def destroy(self, request, pk=None):
+        """Handle removing an object"""
+
+        return Response({'http_method': 'DELETE'})
