@@ -3,8 +3,10 @@ from rest_framework import viewsets #Viewsets 클래스 가져오기
 
 from rest_framework.response import Response    #Response object 가져옴
 from rest_framework import status   #API에서 응답 바나환할 때 사용할 수 있는 HTTP status code
+from rest_framework.authentication import TokenAuthentication   #사용자 API로 자신을 인증하는데 사용하는 토큰
 
-from profiles_api import serializers    #작성한 serializers 임포트
+from profiles_api import permissions    #작성한 permissions.py 참조
+from profiles_api import serializers, models    #작성한 serializers, models 임포트
 
 class HelloApiView(APIView):    #문서 문자열 테스트 APIView
     """Test API View"""
@@ -132,3 +134,14 @@ class HelloViewSet(viewsets.ViewSet):
         """Handle removing an object"""
 
         return Response({'http_method': 'DELETE'})
+
+#######################################################################
+
+#profile viewset 정의
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating, creating and updating profiles"""
+    serializer_class = serializers.UserProfileSerializer    #UserProfileSerializer 사용해서 검증
+    queryset = models.UserProfile.objects.all() #..?viewsets 함수들 이용하는데 사용하는듯
+
+    authentication_classes = (TokenAuthentication,) # 사용자 인증 방법 설정, 특정 작업 수행 및 특정 API 사용 권한에 대한 것, 단일 항목이 아닌 튜플로 생성
+    permission_classes = (permissions.UpdateOwnProfile,)    #permissions.py에서 작성한 권한에 대한 코드(유저 확인 및 메소드 확인)

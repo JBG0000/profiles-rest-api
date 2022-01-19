@@ -6,6 +6,7 @@ from profiles_api import views  #API View가 포함된 view 혹은 vies모듈 �
 
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset') #URL 사용하여 필요시 라우터에서 URL 검색
+router.register('profile', views.UserProfileViewSet)    #UseProfileViewSet 클래스 라우팅, 할당된 모델에서 이름 알아낼 수 있으므로 base_name 작성 안해도 됨
 
 urlpatterns = [ #View에 매핑되는 경로
     path('hello-view/', views.HelloApiView.as_view()),  #경로, 호출 : APiView
