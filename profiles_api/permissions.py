@@ -17,3 +17,15 @@ class UpdateOwnProfile(permissions.BasePermission):
         return obj.id == request.user.id
 
         #위 두가지가 모두 true인 경우에 허가...내리는 클래스인 것으로 일단 이해
+
+
+#사용자가 자신의 상태를 업데이트 할 수 있도록 하는 클래스
+class UpdateOwnStatus(permissions.BasePermission):
+    """Allow users to update their own status"""
+
+    def has_object_permission(self, request, view, obj):
+        """Check the user is trying to update their own status"""
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.user_profile.id == request.user.id

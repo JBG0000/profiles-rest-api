@@ -3,6 +3,10 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 
+from django.conf import settings    #settings.py에서 설정을 검색하는데... 도움이 된다 : settings.py의 AUTH_USER_MODEL 검색
+
+#우리의 데이터베이스들이 있는 파일이다
+
 #부모 클래스 BaseUserManager로 지정
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles""" #관리자가 사용하는 모델, 관리자 작업 방식은 사용자가 지정함
@@ -58,3 +62,18 @@ class UserProfile(AbstractBaseUser, PermissionsMixin): #카멜 케이스로 작�
     def __str__(self):  #사용자 프로필 개체를 python에서 문자열로 변환
         """Return string representation of user"""
         return self.email   #이메일 주소 반환
+
+
+#프로필 피드 API DB 생성
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+    user_profile = models.ForeignKey(   #외래키 등록
+        settings.AUTH_USER_MODEL,   #settings.py에서 참조 : 이유는,, 59강 다시보기
+        on_delete=models.CASCADE    #삭제시 CASCADE(제거 이후 어떤 동작하는지 알려줌)
+    )
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """Return the model as a string"""
+        return self.status_text
